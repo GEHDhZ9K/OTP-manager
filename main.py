@@ -7,14 +7,13 @@ del path[-1]
 if os.getcwd() != "/".join(path):
   os.chdir(os.path.dirname(sys.argv[0]))
 
-name = input(str("Enter the name: "))
-secret = input(str("Enter the secret: "))
+name = "name1"
+secret = "secret1"
 
 def create_json():
   with open("./data/storage.json", "w") as f:
     data = {"keys" :{}}
     json.dump(data, f, indent=2)
-
 
 if "data" not in os.listdir():
   os.mkdir("data")
@@ -32,3 +31,8 @@ def append_dict(file="./data/storage.json"):
     f_keys = f_load["keys"]
     f_keys[name] = secret
     return f_load
+
+def read_dict(file="./data/storage.json"):
+  with open(file, "r") as f:
+    f_load = json.load(f)
+  return f_load
