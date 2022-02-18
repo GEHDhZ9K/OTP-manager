@@ -6,12 +6,12 @@ path = os.path.abspath(__file__).split("/")[0:-1]
 if os.getcwd() != "/".join(path):
   os.chdir(os.path.dirname(sys.argv[0]))
 
-name = "name5"
-secret = "secret5"
+name = "name1"
+secret = "secret1"
 
 def create_json():
   with open("./data/storage.json", "w") as f:
-    data = {"keys" :{}}
+    data = {"credential": {"password": "test"}, "keys" :{}}
     json.dump(data, f, indent=2)
 
 if "data" not in os.listdir():
@@ -20,45 +20,46 @@ if "data" not in os.listdir():
 elif "storage.json" not in os.listdir("data"):
   create_json()
 
-def write_dict(data, file="./data/storage.json"):
-  with open(file, "w") as f:
-    json.dump(data, f,indent=2)
+def write_json(data, file="./data/storage1.json"):
+	with open(file, "w") as f:
+		json.dump(data, f, indent=2)
 
-def append_dict(file="./data/storage.json"):
-  with open(file, "r") as f:
-    f_load = json.load(f)
-    f_keys = f_load["keys"]
-    f_keys[name] = secret
-    return f_load
+def append_dict(prev, new):
+	prev_keys = prev["keys"]
+	prev_keys[new[0]] = new[1]
+	return prev
 
-def read_dict(file="./data/storage.json"):
-  with open(file, "r") as f:
-    f_load = json.load(f)
-  return f_load
+def read_json(file="./data/storage.json"):
+	with open(file, "r") as f:
+		f_load = json.load(f)
+		return f_load
 
-def encryption(name, secret):
-  return dict(zip([chr(ord(i) << 2) for i in name], [chr(ord(i) << 2) for i in secret]))
-  
-def decryption(file="./data/storage.json"):
+def encrypt(name="name3", secret="secret3"):
+  name_l = "".join([chr(ord(i) << 2) for i in name])
+  secret_l = "".join([chr(ord(i) << 2) for i in secret])
+  return name_l, secret_l
+
+def decrypt(file="./data/storage.json"):
+	name_l, secret_l = [], []
+	with open(file, "r") as f:
+		f_load = json.load(f)
+		f_keys = f_load["keys"]
+		for key in f_keys:
+			name_l.append("".join([chr(ord(i) >> 2) for i in key]))
+			secret_l.append("".join([chr(ord(j) >> 2) for j in f_keys.get(key)]))
+	return dict(zip(name_l, secret_l))
+
+def check_pass(passw, file="./data/storage.json"):
   with open(file) as f:
-    f_loaded = json.load(f)
-    f_keys = f_loaded['keys']
-    json_keys = {}
-    for key in f_keys:
-      json_keys["".join([chr(ord(_i) >> 2) for _i in key])] = "".join([chr(ord(_a) >> 2) for _a in f_keys.get(key)])
-  return json_keys
-
-def check_pass(token, file="./data/storage.json"):
-  with open(file) as f:
-    f_loaded = json.load(f)
-    f_keys = f_loaded["credentials"]
-    passw = "".join([chr(ord(_i) >> 2) for _i in f_keys.get("password")])
-    if f_keys.get("password") == "test" and token == "test":
-      return True
-    elif f_keys.get("password") == "test" and token != "test":
-      return False
-    else:
-      if token == passw:
+    f_load = json.load(f)
+    f_cred = f_load['credentials']
+    for i in f_cred:
+      if f_cred.get(i) == "test" and passw == "test":
         return True
-      else:
+      elif f_cred.get(i) == "test" and passw != "test":
         return False
+      else:
+        if passw == "".join([chr(ord(j) >> 2) for j in f_cred.get(i)]):
+          return True
+        else:
+          return False

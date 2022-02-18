@@ -45,10 +45,7 @@ class Manager:
 		self.file.add_command(label="Exit", command=self.root.quit)
 		self.menubar.add_cascade(label="File", menu=self.file)
 
-
-
 		self.root.config(menu=self.menubar)
-		
 		self.root.mainloop()
 		
 	def add_otp(self):
@@ -63,8 +60,6 @@ class Manager:
 		
 		Label(self.root, text="Secret", width=30, height="2", font=("Arial", 10, "bold")).place(x=-80, y=70)
 		Entry(self.root, width=35, textvariable=self.secret).place(x=65, y=75)
-
-		self.root.mainloop()
 
 def main():
 	root = Tk()
