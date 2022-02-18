@@ -28,7 +28,7 @@ class GUI:
 			
 	def Manager_GUI(self):
 		self.new_win = Toplevel(self.root)
-		self.new_win = Manager(self.new_win, "otp-manager", "1010x610+510+125")
+		self.new_win = Manager(self.new_win, "otp-manager", "560x200+600+175")
 
 
 class Manager:
@@ -37,17 +37,12 @@ class Manager:
 		self.root.title(title)
 		self.root.geometry(geometry)
 
-		self.menubar = Menu(background='#ff8000', foreground="black", activebackground="white", activeforeground="black")
-		self.file = Menu(self.menubar, tearoff=0, background='#ffcc99', foreground="black")
-		self.file.add_command(label="Add", command=self.add_otp)
-		self.file.add_command(label="Remove")
-		self.file.add_separator()
-		self.file.add_command(label="Exit", command=self.root.quit)
-		self.menubar.add_cascade(label="File", menu=self.file)
+		btnList = ["Add", "List", "Quit"]
+		btnCmdList = [self.add_otp, self.test, self.test]
 
-		self.root.config(menu=self.menubar)
-		self.root.mainloop()
-		
+		for i in range(3):
+			Button(self.root, text=btnList[i], width=20, height=10, command=btnCmdList[i]).pack(padx=10, side=LEFT)
+
 	def add_otp(self):
 		self.root = Tk()
 		self.root.title("Add")
@@ -60,6 +55,10 @@ class Manager:
 		
 		Label(self.root, text="Secret", width=30, height="2", font=("Arial", 10, "bold")).place(x=-80, y=70)
 		Entry(self.root, width=35, textvariable=self.secret).place(x=65, y=75)
+	
+	def test(self):
+		messagebox.showinfo(title="Success", message="Succesfully executed")
+
 
 def main():
 	root = Tk()
