@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os, json, sys, pyotp
+import os, json, sys
 
 path = os.path.abspath(__file__).split("/")[0:-1]
 if os.getcwd() != "/".join(path):
@@ -52,7 +52,7 @@ def decrypt(file="./data/storage.json"):
 def check_pass(passw, file="./data/storage.json"):
   with open(file) as f:
     f_load = json.load(f)
-    f_cred = f_load['credentials']
+    f_cred = f_load['credential']
     for i in f_cred:
       if f_cred.get(i) == "test" and passw == "test":
         return True
@@ -63,6 +63,13 @@ def check_pass(passw, file="./data/storage.json"):
           return True
         else:
           return False
+
+def change_pwd(text, file="./data/storage.json"):
+  with open(file) as f:
+    f_load = json.load(f)
+    f_cred = f_load(f)
+    encoded = "".join([chr(ord(i) << 2) for i in text])
+    f_cred["password"] = encoded
 
 def write_to_file(name, secret):
   write_json(append_dict(read_json(), encrypt(name, secret)))

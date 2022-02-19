@@ -7,7 +7,7 @@ except ImportError:
 	from Tkinter import *
 	from Tkinter import message, ttk, StringVar
 
-import otp_logic, pyotp
+import otp_logic, pyotp, sys
 
 global_font = font=("Arial", 12, "bold")
 
@@ -28,13 +28,12 @@ class GUI:
 	def check(self):
 		if otp_logic.check_pass(self.passw.get()):
 			self.Manager_GUI()
-			print(self.passw.get())
 		else:
 			messagebox.showwarning(title="Error", message="You entered the wrong password.")
 			
 	def Manager_GUI(self):
 		self.new_win = Toplevel(self.root)
-		self.new_win = Manager(self.new_win, "otp-manager", "560x200+600+175")
+		self.new_win = Manager(self.new_win, "otp-manager", "380x250+600+175")
 
 class Manager:
 	def __init__(self, root, title, geometry):
@@ -42,10 +41,21 @@ class Manager:
 		self.root.title(title)
 		self.root.geometry(geometry)
 
-		btnList = ["Add", "List", "Quit"]
-		btnCmdList = [self.add_otp, self.otp_list, self.root.quit]
+		self.test = StringVar()
 
-		for i in range(3):
+		self.menubar = Menu(self.root)
+		self.misc = Menu(self.menubar, tearoff=0)
+		self.misc.add_command(label="Change Password", command=self.otp_pwd)
+		self.misc.add_separator()
+		self.misc.add_command(label="Quit", command=sys.exit)
+		self.menubar.add_cascade(label="Misc", menu=self.misc)
+
+		self.root.config(menu=self.menubar)
+
+		btnList = ["Add", "List"]
+		btnCmdList = [self.add_otp, self.otp_list]
+
+		for i in range(2):
 			Button(self.root, text=btnList[i], width=20, height=10, command=btnCmdList[i]).pack(padx=10, side=LEFT)
 
 	def add_otp(self):
@@ -90,6 +100,22 @@ class Manager:
 			self.tree.insert("", 1, values=(Name, Otp))
 
 		self.root.mainloop()
+	
+	def otp_pwd(self):
+		self.root = Tk()
+		self.root.title("Change Password")
+		self.root.geometry("400x150+660+125")
+
+		self.new_pw = StringVar()
+		
+		Label(self.root, text="Password", width=30, height="2", font=("Arial", 10, "bold")).place(x=-80, y=40)
+		Entry(self.root, textvariable=self.new_pw).place(x=65, y=40, width=150)
+		Button(self.root, text="Submit", font=global_font, command=self.dummy).place(x=0, y=80)
+
+		self.root.mainloop()
+
+	def dummy(self):
+		print(self.new_pw.get())
 
 def main():
 	root = Tk()
