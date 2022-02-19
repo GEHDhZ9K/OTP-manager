@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os, json, sys
+import os, json, sys, pyotp
 
 path = os.path.abspath(__file__).split("/")[0:-1]
 if os.getcwd() != "/".join(path):
@@ -20,7 +20,7 @@ if "data" not in os.listdir():
 elif "storage.json" not in os.listdir("data"):
   create_json()
 
-def write_json(data, file="./data/storage1.json"):
+def write_json(data, file="./data/storage.json"):
 	with open(file, "w") as f:
 		json.dump(data, f, indent=2)
 
@@ -34,7 +34,7 @@ def read_json(file="./data/storage.json"):
 		f_load = json.load(f)
 		return f_load
 
-def encrypt(name="name3", secret="secret3"):
+def encrypt(name, secret):
   name_l = "".join([chr(ord(i) << 2) for i in name])
   secret_l = "".join([chr(ord(i) << 2) for i in secret])
   return name_l, secret_l
@@ -63,3 +63,6 @@ def check_pass(passw, file="./data/storage.json"):
           return True
         else:
           return False
+
+def write_to_file(name, secret):
+  write_json(append_dict(read_json(), encrypt(name, secret)))
