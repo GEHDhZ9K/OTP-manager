@@ -5,7 +5,7 @@ try:
 	from tkinter import messagebox, ttk, StringVar
 except ImportError:
 	from Tkinter import *
-	from Tkinter import message, ttk, StringVar
+	from Tkinter import messagebox, ttk, StringVar
 
 import otp_logic, pyotp, sys
 
@@ -57,24 +57,6 @@ class Manager:
 
 		for i in range(2):
 			Button(self.root, text=btnList[i], width=20, height=10, command=btnCmdList[i]).pack(padx=10, side=LEFT)
-
-	def add_otp(self):
-		self.root = Tk()
-		self.root.title("Add")
-		self.root.geometry("400x150")
-		self.uname, self.secret = StringVar(), StringVar()
-
-		Label(self.root, text="Name", width=30, height="2", font=("Arial", 10, "bold")).place(x=-80, y=40)
-		Label(self.root, text="Secret", width=30, height="2", font=("Arial", 10, "bold")).place(x=-80, y=70)
-		Entry(self.root, width=20, textvariable=self.uname).place(x=65, y=45, width=150)
-		Entry(self.root, width=35, textvariable=self.secret).place(x=65, y=75)
-
-		Button(self.root, text="Submit", font=global_font, command=self.send_input).place(x=0, y=100)
-
-		self.root.mainloop()
-
-	def send_input(self):
-		otp_logic.write_to_file((self.uname.get()), (self.secret.get()))
 		
 	def otp_list(self):
 		self.root = Tk()
@@ -100,9 +82,36 @@ class Manager:
 			self.tree.insert("", 1, values=(Name, Otp))
 
 		self.root.mainloop()
-	
+
+	def add_otp(self):
+		self.new_add = Toplevel(self.root)
+		self.new_add = otp_add(self.new_add)
+
 	def otp_pwd(self):
-		self.root = Tk()
+		self.pwd_change = Toplevel(self.root)
+		self.pwd_change = change_pwd(self.pwd_change)
+
+class otp_add:	
+	def __init__(self, root):
+		self.root = root
+		self.root.title("Add")
+		self.root.geometry("400x150")
+		self.uname, self.secret = StringVar(), StringVar()
+
+		Label(self.root, text="Name", width=30, height="2", font=("Arial", 10, "bold")).place(x=-80, y=40)
+		Label(self.root, text="Secret", width=30, height="2", font=("Arial", 10, "bold")).place(x=-80, y=70)
+		Entry(self.root, width=20, textvariable=self.uname).place(x=65, y=45, width=150)
+		Entry(self.root, width=35, textvariable=self.secret).place(x=65, y=75)
+		Button(self.root, text="Submit", font=global_font, command=self.send_input).place(x=0, y=100)
+
+		self.root.mainloop()
+
+	def send_input(self):
+		print(self.uname.get(), self.secret.get())
+
+class change_pwd:
+	def __init__(self, root):
+		self.root = root
 		self.root.title("Change Password")
 		self.root.geometry("400x150+660+125")
 
@@ -116,6 +125,7 @@ class Manager:
 
 	def dummy(self):
 		print(self.new_pw.get())
+		# otp_logic.change_pwd(self.new_pw.get())
 
 def main():
 	root = Tk()

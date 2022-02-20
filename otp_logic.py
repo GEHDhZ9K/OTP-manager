@@ -64,12 +64,14 @@ def check_pass(passw, file="./data/storage.json"):
         else:
           return False
 
-def change_pwd(text, file="./data/storage.json"):
+def change_pwd(text, file="./data/storage1.json"):
   with open(file) as f:
     f_load = json.load(f)
-    f_cred = f_load(f)
+    f_cred = f_load['credential']
     encoded = "".join([chr(ord(i) << 2) for i in text])
     f_cred["password"] = encoded
+  with open(file, "w") as f:
+    json.dump(f_load, f)
 
 def write_to_file(name, secret):
   write_json(append_dict(read_json(), encrypt(name, secret)))
