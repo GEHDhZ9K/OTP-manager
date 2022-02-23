@@ -57,31 +57,10 @@ class Manager:
 
 		for i in range(2):
 			Button(self.root, text=btnList[i], width=20, height=10, command=btnCmdList[i]).pack(padx=10, side=LEFT)
-		
+
 	def otp_list(self):
-		self.root = Tk()
-		self.root.title("OTP List")
-		self.root.geometry("300x610+660+125")
-		self.root.resizable(0, 1)
-
-		self.TableMargin = Frame(self.root, width=500)
-		self.TableMargin.pack(side=TOP)
-		self.scrollbary = Scrollbar(self.TableMargin, orient=VERTICAL)
-		self.tree = ttk.Treeview(self.TableMargin, columns=("Name", "OTP"), height=30)
-		self.tree.heading("Name", text="Name", anchor=W)
-		self.tree.heading("OTP", text="OTP", anchor=W)
-		self.tree.column("#0", stretch=NO, minwidth=0, width=0)
-		self.tree.column("#1", stretch=NO, minwidth=0, width=200)
-		self.tree.column("#2", stretch=NO, minwidth=0, width=100)
-		self.tree.pack()
-
-		keys = otp_logic.decrypt()
-		for i in keys:
-			Name = i
-			Otp = pyotp.TOTP(keys.get(i)).now()
-			self.tree.insert("", 1, values=(Name, Otp))
-
-		self.root.mainloop()
+		self.new_list = Toplevel(self.root)
+		self.new_list = list_otp(self.new_list)
 
 	def add_otp(self):
 		self.new_add = Toplevel(self.root)
@@ -104,10 +83,8 @@ class otp_add:
 		Entry(self.root, width=35, textvariable=self.secret).place(x=65, y=75)
 		Button(self.root, text="Submit", font=global_font, command=self.send_input).place(x=0, y=100)
 
-		self.root.mainloop()
-
 	def send_input(self):
-		print(self.uname.get(), self.secret.get())
+		otp_logic.write_to_file(self.uname.get(), self.secret.get())
 
 class change_pwd:
 	def __init__(self, root):
@@ -119,12 +96,34 @@ class change_pwd:
 		
 		Label(self.root, text="Password", width=30, height="2", font=("Arial", 10, "bold")).place(x=-80, y=40)
 		Entry(self.root, textvariable=self.new_pw).place(x=65, y=40, width=150)
-		Button(self.root, text="Submit", font=global_font, command=self.dummy).place(x=0, y=80)
+		Button(self.root, text="Submit", font=global_font, command=self.pwd_change).place(x=0, y=80)
 
-		self.root.mainloop()
-
-	def dummy(self):
+	def pwd_change(self):
 		otp_logic.change_pwd(self.new_pw.get())
+
+class list_otp:
+	def __init__(self, root):
+		self.root = root
+		self.root.title("OTP List")
+		self.root.geometry("300x610+660+125")
+		self.root.resizable(0, 0)
+
+		self.TableMargin = Frame(self.root, width=500)
+		self.TableMargin.pack(side=TOP)
+		self.scrollbary = Scrollbar(self.TableMargin, orient=VERTICAL)
+		self.tree = ttk.Treeview(self.TableMargin, columns=("Name", "OTP"), height=30)
+		self.tree.heading("Name", text="Name", anchor=W)
+		self.tree.heading("OTP", text="OTP", anchor=W)
+		self.tree.column("#0", stretch=NO, minwidth=0, width=0)
+		self.tree.column("#1", stretch=NO, minwidth=0, width=200)
+		self.tree.column("#2", stretch=NO, minwidth=0, width=100)
+		self.tree.pack()
+
+		keys = otp_logic.decrypt()
+		for i in keys:
+			Name = i
+			Otp = pyotp.TOTP(keys.get(i)).now()
+			self.tree.insert("", 1, values=(Name, Otp))
 
 def main():
 	root = Tk()
