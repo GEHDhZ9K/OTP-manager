@@ -52,26 +52,25 @@ def decrypt(file="./data/storage.json"):
 def check_pass(passw, file="./data/storage.json"):
   with open(file) as f:
     f_load = json.load(f)
-    f_cred = f_load['credential']
-    for i in f_cred:
-      if f_cred.get(i) == "test" and passw == "test":
+    f_cred = f_load['credential']["password"]
+    if f_cred == "test" and passw == "test":
+      return True
+    elif f_cred == "test" and passw != "test":
+      return False
+    else:
+      if passw == "".join([chr(ord(j) >> 2) for j in f_cred]):
         return True
-      elif f_cred.get(i) == "test" and passw != "test":
-        return False
       else:
-        if passw == "".join([chr(ord(j) >> 2) for j in f_cred.get(i)]):
-          return True
-        else:
-          return False
+        return False
 
-def change_pwd(text, file="./data/storage1.json"):
+def change_pwd(text, file="./data/storage.json"):
   with open(file) as f:
     f_load = json.load(f)
-    f_cred = f_load['credential']
     encoded = "".join([chr(ord(i) << 2) for i in text])
-    f_cred["password"] = encoded
-  with open(file, "w") as f:
-    json.dump(f_load, f)
+    f_load["credential"]["password"] = encoded
+  with open(file, "w") as fp:
+    json.dump(f_load, fp, indent=2)
+
 
 def write_to_file(name, secret):
   write_json(append_dict(read_json(), encrypt(name, secret)))

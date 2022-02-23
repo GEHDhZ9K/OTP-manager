@@ -124,8 +124,7 @@ class change_pwd:
 		self.root.mainloop()
 
 	def dummy(self):
-		print(self.new_pw.get())
-		# otp_logic.change_pwd(self.new_pw.get())
+		otp_logic.change_pwd(self.new_pw.get())
 
 def main():
 	root = Tk()
