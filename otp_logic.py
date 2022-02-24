@@ -56,15 +56,10 @@ def check_pass(passw, file="./data/storage.json"):
   with open(file) as f:
     f_load = json.load(f)
     f_cred = f_load['credential']["password"]
-    if f_cred == "test" and passw == "test":
+    if passw == decryption_func(f_cred):
       return True
-    elif f_cred == "test" and passw != "test":
-      return False
     else:
-      if passw == decryption_func(f_cred):
-        return True
-      else:
-        return False
+      return False
 
 def change_pwd(text, file="./data/storage.json"):
   with open(file) as f:
