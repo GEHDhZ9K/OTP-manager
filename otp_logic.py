@@ -13,7 +13,7 @@ def decryption_func(value):
   return "".join([chr(ord(i) >> 2) for i in str(value)])
 
 def create_json():
-  with open("./data/storage1.json", "w") as f:
+  with open("./data/storage.json", "w") as f:
     data = {"credential": {"password": "ǐƔǌǐ"}, "keys" :{}}
     json.dump(data, f, indent=2)
 
@@ -23,7 +23,7 @@ if "data" not in os.listdir():
 elif "storage1.json" not in os.listdir("data"):
   create_json()
 
-def write_json(data, file="./data/storage1.json"):
+def write_json(data, file="./data/storage.json"):
 	with open(file, "w") as f:
 		json.dump(data, f, indent=2)
 
