@@ -7,10 +7,10 @@ if os.getcwd() != "/".join(path):
   os.chdir(os.path.dirname(sys.argv[0]))
 
 def encryption_func(value):
-  return "".join([chr(ord(i) << 2) for i in value])
+  return "".join([chr(ord(i) << 2) for i in str(value)])
 
 def decryption_func(value):
-  return "".join([chr(ord(i) >> 2) for i in value])
+  return "".join([chr(ord(i) >> 2) for i in str(value)])
 
 def create_json():
   with open("./data/storage1.json", "w") as f:
@@ -73,7 +73,6 @@ def change_pwd(text, file="./data/storage1.json"):
     f_load["credential"]["password"] = encoded
   with open(file, "w") as fp:
     json.dump(f_load, fp, indent=2)
-
 
 def write_to_file(name, secret):
   write_json(append_dict(read_json(), encrypt(name, secret)))

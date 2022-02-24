@@ -127,7 +127,7 @@ class list_otp:
 
 def main():
 	root = Tk()
-	MainWindow = GUI(root, "OTP-Manager", "300x300+700+150")
+	MainWindow = GUI(root, "OTP-Manager", "350x300+700+150")
 
 if __name__ == "__main__":
 	main() 
