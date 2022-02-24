@@ -14,7 +14,7 @@ def decryption_func(value):
 
 def create_json():
   with open("./data/storage1.json", "w") as f:
-    data = {"credential": {"password": "test"}, "keys" :{}}
+    data = {"credential": {"password": "ǐƔǌǐ"}, "keys" :{}}
     json.dump(data, f, indent=2)
 
 if "data" not in os.listdir():
@@ -32,7 +32,7 @@ def append_dict(prev, new):
 	prev_keys[new[0]] = new[1]
 	return prev
 
-def read_json(file="./data/storage1.json"):
+def read_json(file="./data/storage.json"):
 	with open(file, "r") as f:
 		f_load = json.load(f)
 		return f_load
@@ -42,7 +42,7 @@ def encrypt(name, secret):
   secret_l = encryption_func(secret)
   return name_l, secret_l
 
-def decrypt(file="./data/storage1.json"):
+def decrypt(file="./data/storage.json"):
 	name_l, secret_l = [], []
 	with open(file, "r") as f:
 		f_load = json.load(f)
@@ -52,7 +52,7 @@ def decrypt(file="./data/storage1.json"):
 			secret_l.append(decryption_func(f_keys.get(key)))
 	return dict(zip(name_l, secret_l))
 
-def check_pass(passw, file="./data/storage1.json"):
+def check_pass(passw, file="./data/storage.json"):
   with open(file) as f:
     f_load = json.load(f)
     f_cred = f_load['credential']["password"]
@@ -66,7 +66,7 @@ def check_pass(passw, file="./data/storage1.json"):
       else:
         return False
 
-def change_pwd(text, file="./data/storage1.json"):
+def change_pwd(text, file="./data/storage.json"):
   with open(file) as f:
     f_load = json.load(f)
     encoded = encryption_func(text)
